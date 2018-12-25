@@ -67,7 +67,7 @@ var combinationSum2 = function (candidates, target) {
             break;
         }
     }
-    console.log(candidates, maxLength);
+    // console.log(candidates, maxLength)
     if (maxLength === candidates.length)
         if (candidates.reduce((prev, curr) => prev += curr, 0) === target)
             return [candidates];
@@ -89,8 +89,9 @@ const findCombination = (length, current, arr, result, target) => {
     let max = current.slice(0, current.length - length).reduce((prev, curr) => prev + arr[curr], 0);
     for (let i = 1; i <= length; i++)
         max += arr[arr.length - i];
-    // if (min > target || max < target) return
-    console.log(min, max, target, current);
+    if (min > target || max < target)
+        return;
+    // console.log(min, max, target, current)
     if (length > 1) {
         const index = current.length - length;
         let start;
@@ -98,11 +99,14 @@ const findCombination = (length, current, arr, result, target) => {
             start = 0;
         else if (current[index - 1] + 1 < arr.length)
             start = current[index - 1] + 1;
-        const end = arr.length - current.length + start;
-        // console.log(start, end)
+        const end = arr.length - length + index;
+        // console.log(current, start, end)
         for (let i = start; i <= end; i++) {
+            // if (arr[i] === arr[i - 1] && arr[i] === arr[i + 1]) continue
             current[index] = i;
-            // for(let i = 0; i < length - index)
+            for (let i = 1; index + i < current.length; i++)
+                current[index + i] = current[index + i - 1] + 1;
+            // console.log(current)
             findCombination(length - 1, current, arr, result, target);
         }
     }
@@ -112,7 +116,7 @@ const findCombination = (length, current, arr, result, target) => {
             for (let i = current[current.length - 1]; i < arr.length; i++) {
                 current[current.length - 1] = i;
                 const sum = current.reduce((prev, curr) => prev + arr[curr], 0);
-                console.log(current);
+                // if (sum === target) console.log(current)
                 if (sum === target)
                     result.add(current.map(i => arr[i]).join(','));
                 else if (sum > target)
@@ -123,7 +127,10 @@ const findCombination = (length, current, arr, result, target) => {
         }
     }
 };
-console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8));
+// console.time('calculate')
+// console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
 // console.log(combinationSum2([2, 5, 2, 1, 2], 5))
 // console.log(combinationSum2([1, 1], 2))
 // console.log(combinationSum2([3, 2, 4, 2], 7));
+// console.log(combinationSum2([14,18,19,30,6,5,14,23,28,18,26,21,12,15,29,18,32,23,6,21,19,30,6,28,17,13,29,28,10,34,26,11,10,32,7,11,32,8,21,18,22,5,34,21,7,20,26,5,9,28,21,23,23,15,8,27,23,32,12,20,31,33,27,28,30,21,34,19], 29));
+// console.timeEnd('calculate')
