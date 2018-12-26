@@ -68,6 +68,7 @@ var combinationSum2 = function (candidates, target) {
         }
     }
     // console.log(candidates, maxLength)
+    return backTrack(candidates, target);
     if (maxLength === candidates.length)
         if (candidates.reduce((prev, curr) => prev += curr, 0) === target)
             return [candidates];
@@ -126,6 +127,18 @@ const findCombination = (length, current, arr, result, target) => {
             current[current.length - 1] = current[current.length - 2] + 1;
         }
     }
+};
+const backTrack = (nums, target, current = [], start = 0, result = []) => {
+    if (target === 0)
+        result.push([...current]);
+    for (let i = start; i < nums.length && target >= nums[i]; i++) {
+        if (i !== start && nums[i] === nums[i - 1])
+            continue;
+        current.push(nums[i]);
+        backTrack(nums, target - nums[i], current, i + 1, result);
+        current.pop();
+    }
+    return result;
 };
 // console.time('calculate')
 // console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))

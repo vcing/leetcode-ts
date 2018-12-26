@@ -66,7 +66,9 @@ var combinationSum2 = function (candidates: number[], target: number) {
       break
     }
   }
+
   // console.log(candidates, maxLength)
+  return backTrack(candidates, target)
 
   if (maxLength === candidates.length)
     if (candidates.reduce((prev, curr) => prev += curr, 0) === target) return [candidates]
@@ -119,6 +121,19 @@ const findCombination = (length: number, current: number[], arr: number[], resul
     }
   }
 }
+
+const backTrack = (nums:number[], target:number, current:number[] = [], start = 0, result:number[][] = []) => {
+  if (target === 0) result.push([...current])
+  for (let i = start; i < nums.length && target >= nums[i]; i++) {
+    if (i !== start && nums[i] === nums[i - 1]) continue
+    current.push(nums[i])
+    backTrack(nums, target - nums[i], current, i + 1, result)
+    current.pop()
+  }
+  return result
+}
+
+
 // console.time('calculate')
 // console.log(combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
 // console.log(combinationSum2([2, 5, 2, 1, 2], 5))
