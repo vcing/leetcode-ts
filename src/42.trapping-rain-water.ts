@@ -30,30 +30,49 @@
  * @param {number[]} height
  * @return {number}
  */
+// var trap = function (height: number[]) {
+//   let left = 0
+//   let right = left + 1
+//   let result = 0
+//   while (right < height.length) {
+//     if (height[left] === 0 || height[left] <= height[right]) right = ++left + 1
+//     else {
+//       let rightIndex = right
+//       for (let i = right + 1; i < height.length; i++) {
+//         if (height[i] >= height[left]) {
+//           rightIndex = i
+//           break;
+//         } else if (height[i] > height[rightIndex]) rightIndex = i
+//       }
+//       if (rightIndex === right) right = ++left + 1
+//       else {
+//         const waterLevel = Math.min(height[left], height[rightIndex])
+//         height.slice(left + 1, rightIndex).forEach(h => result += (waterLevel - h))
+//         left = rightIndex
+//         right = left + 1
+//       }
+//     }
+//   }
+//   return result
+// };
+
 var trap = function (height: number[]) {
-  let left = 0
-  let right = left + 1
+  const stack = []
   let result = 0
-  while (right < height.length) {
-    if (height[left] === 0 || height[left] <= height[right]) right = ++left + 1
-    else {
-      let rightIndex = right
-      for (let i = right + 1; i < height.length; i++) {
-        if (height[i] >= height[left]) {
-          rightIndex = i
-          break;
-        } else if (height[i] > height[rightIndex]) rightIndex = i
-      }
-      if (rightIndex === right) right = ++left + 1
-      else {
-        const waterLevel = Math.min(height[left], height[rightIndex])
-        height.slice(left + 1, rightIndex).forEach(h => result += (waterLevel - h))
-        left = rightIndex
-        right = left + 1
-      }
+  let current = 0
+  while (current < height.length) {
+    // console.log(stack)
+    while (stack.length > 0 && height[current] > height[stack[stack.length - 1]]) {
+      const top = stack.pop()
+      if (stack.length === 0) break
+      const distance = current - stack[stack.length - 1] - 1
+      const boundHeight = Math.min(height[current], height[stack[stack.length - 1]]) - height[top]
+      result += distance * boundHeight
     }
+    stack.push(current++)
   }
   return result
-};
+}
 
+// console.log(trap([4, 2, 0, 3, 2, 5]))
 // console.log(trap([4, 2, 0, 3, 2, 5]))
