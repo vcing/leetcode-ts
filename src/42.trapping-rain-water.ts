@@ -56,21 +56,35 @@
 //   return result
 // };
 
+// var trap = function (height: number[]) {
+//   const stack = []
+//   let result = 0
+//   let current = 0
+//   while (current < height.length) {
+//     // console.log(stack)
+//     while (stack.length > 0 && height[current] > height[stack[stack.length - 1]]) {
+//       const top = stack.pop()
+//       if (stack.length === 0) break
+//       const distance = current - stack[stack.length - 1] - 1
+//       const boundHeight = Math.min(height[current], height[stack[stack.length - 1]]) - height[top]
+//       result += distance * boundHeight
+//     }
+//     stack.push(current++)
+//   }
+//   return result
+// }
+
 var trap = function (height: number[]) {
-  const stack = []
   let result = 0
-  let current = 0
-  while (current < height.length) {
-    // console.log(stack)
-    while (stack.length > 0 && height[current] > height[stack[stack.length - 1]]) {
-      const top = stack.pop()
-      if (stack.length === 0) break
-      const distance = current - stack[stack.length - 1] - 1
-      const boundHeight = Math.min(height[current], height[stack[stack.length - 1]]) - height[top]
-      result += distance * boundHeight
-    }
-    stack.push(current++)
-  }
+  const leftMax = [height[0]]
+  const rightMax = []
+  rightMax[height.length - 1] = height[height.length - 1]
+  for (let i = 1; i < height.length; i++)
+    leftMax[i] = Math.max(height[i], leftMax[i - 1])
+  for (let i = height.length - 2; i >= 0; i--)
+    rightMax[i] = Math.max(height[i], rightMax[i + 1])
+  for (let i = 0; i < height.length; i++)
+    result += (Math.min(leftMax[i], rightMax[i]) - height[i])
   return result
 }
 
