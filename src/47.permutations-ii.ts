@@ -31,6 +31,18 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-var permuteUnique = function (nums: number[]) {
+var permuteUnique = function (nums: number[], prefix: number[] = [], result: number[][] = []) {
+  nums.sort((a, b) => a - b)
+  if (nums.length > 1)
+    for (let i = 0; i < nums.length; i++) {
+      if (i > 0 && nums[i] === nums[i - 1]) continue
+      permuteUnique(nums.slice(0, i).concat(nums.slice(i + 1)), prefix.concat(nums[i]), result)
+    }
+  else
+    result.push(prefix.concat(nums));
 
+  return result
 };
+
+// console.log(permuteUnique([1, 1, 2]))
+// console.log(permuteUnique([-1,2,-1,2,1,-1,2,1]))
