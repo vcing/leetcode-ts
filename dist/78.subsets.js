@@ -49,16 +49,5 @@ var subsets = function (nums) {
         backTracking([], i, 0);
     return result;
 };
-// var subsets = function(s) {
-//   if (s.length == 0) {
-//       return [[]]
-//   } else {
-//       let rest = subsets(s.slice(1))  
-//       let newSets = rest.map(         
-//           (set) => [s[0], ...set]
-//       )
-//       return [...rest, ...newSets]    
-//   }
-// };
 console.log(subsets([1, 2, 3]));
 // console.log(subsets([4, 2, 3, 4, 5, 6]))
