@@ -37,9 +37,9 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-var subsets = function (nums) {
-  const result = [[]]
-  const backTracking = (current, length, start) => {
+var subsets = function (nums: number[]) {
+  const result: number[][] = [[]]
+  const backTracking = (current: number[], length: number, start: number) => {
     if (current.length === length) return result.push(current)
     for (let i = start; i < nums.length; i++) backTracking(current.concat(nums[i]), length, i + 1)
   }
@@ -48,5 +48,5 @@ var subsets = function (nums) {
   return result
 };
 
-console.log(subsets([1,2,3]))
+console.log(subsets([1, 2, 3]))
 // console.log(subsets([4, 2, 3, 4, 5, 6]))
