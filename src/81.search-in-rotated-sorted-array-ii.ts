@@ -46,7 +46,7 @@
  * @param {number} target
  * @return {boolean}
  */
-var search = function (nums: number[], target: number): boolean {
+var SRSA = function (nums: number[], target: number): boolean {
   nums = [...new Set(nums)]
   // console.log(nums)
   if (nums.length <= 1) return target === nums[0]
