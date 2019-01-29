@@ -40,7 +40,7 @@
  * @param {ListNode} head
  * @return {ListNode}
  */
-var deleteDuplicates = function (head) {
+var deleteDuplicatesII = function (head) {
     const fake = { val: null, next: head };
     let left = fake;
     let right = head;
