@@ -41,7 +41,7 @@
  * @param {number} n
  * @return {void} Do not return anything, modify nums1 in-place instead.
  */
-var merge = function (nums1, m, nums2, n) {
+var merge2 = function (nums1, m, nums2, n) {
     let currentLength = m;
     const insert = (index, value) => {
         for (let i = currentLength; i >= index; i--) {

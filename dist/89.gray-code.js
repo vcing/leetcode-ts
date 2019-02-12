@@ -55,4 +55,17 @@
  * @return {number[]}
  */
 var grayCode = function (n) {
+    if (n === 0)
+        return [0];
+    if (n === 1)
+        return [0, 1];
+    let arr = ['00', '01', '11', '10'];
+    n -= 2;
+    while (n--) {
+        const arr1 = arr.map(a => 0 + a);
+        const arr2 = arr.map(a => 1 + a).reverse();
+        arr = arr1.concat(arr2);
+    }
+    return arr.map(a => parseInt(a, 2));
 };
+// console.log(grayCode(3))
