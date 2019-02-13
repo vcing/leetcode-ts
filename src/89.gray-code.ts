@@ -54,7 +54,7 @@
  * @param {number} n
  * @return {number[]}
  */
-var grayCode = function (n) {
+var grayCode = function (n: number) {
   if (n === 0)
     return [0];
   if (n === 1)
