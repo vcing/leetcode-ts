@@ -13,10 +13,10 @@
  *
  * Given an integer n, generate all structurally unique BST's (binary search
  * trees) that store values 1 ... n.
- * 
+ *
  * Example:
- * 
- * 
+ *
+ *
  * Input: 3
  * Output:
  * [
@@ -28,14 +28,14 @@
  * ]
  * Explanation:
  * The above output corresponds to the 5 unique BST's shown below:
- * 
+ *
  * ⁠  1         3     3      2      1
  * ⁠   \       /     /      / \      \
  * ⁠    3     2     1      1   3      2
  * ⁠   /     /       \                 \
  * ⁠  2     1         2                 3
- * 
- * 
+ *
+ *
  */
 /**
  * Definition for a binary tree node.
@@ -48,29 +48,29 @@
  * @param {number} n
  * @return {TreeNode[]}
  */
-var generateTrees = function (n: number) {
-  const result: TreeNode[] = []
-
-  const nextNode = (root: TreeNode, node: TreeNode, left: number[]) => {
-    if (left.length === 0) result.push(root)
-    let l = 0
-    let rStart = 1
-    while (left[rStart] < node.val) rStart++
-    while (left[l] <= node.val) {
-      let r = rStart
-      if (l >= r) r = l + 1
-      while (r < left.length) {
-        // node.right = { val: r, left: null, right: null }
-      }
+var generateTrees = function (n) {
+    const result = [];
+    const nextNode = (root, node, left) => {
+        if (left.length === 0)
+            result.push(root);
+        let l = 0;
+        let rStart = 1;
+        while (left[rStart] < node.val)
+            rStart++;
+        while (left[l] <= node.val) {
+            let r = rStart;
+            if (l >= r)
+                r = l + 1;
+            while (r < left.length) {
+                // node.right = { val: r, left: null, right: null }
+            }
+        }
+    };
+    for (let i = 1; i <= n; i++) {
+        const root = { val: i, left: null, right: null };
+        const left = new Array(n).fill(1).map((v, i) => i + 1);
+        left.splice(i - 1, 1);
+        nextNode(root, root, left);
     }
-  }
-
-  for (let i = 1; i <= n; i++) {
-    const root: TreeNode = { val: i, left: null, right: null }
-    const left = new Array(n).fill(1).map((v, i) => i + 1)
-    left.splice(i - 1, 1)
-    nextNode(root, root, left)
-  }
-
-  return result
+    return result;
 };

@@ -35,10 +35,25 @@
  *     this.left = this.right = null;
  * }
  */
+interface TreeNode {
+  val: number,
+  left: TreeNode,
+  right: TreeNode
+}
 /**
  * @param {TreeNode} root
  * @return {number[]}
  */
-var inorderTraversal = function(root) {
-    
+var inorderTraversal = function (root: TreeNode) {
+  if (!root) return []
+  const result: number[] = []
+
+  const inorder = (root: TreeNode) => {
+    if (root.left) inorder(root.left)
+    result.push(root.val)
+    if (root.right) inorder(root.right)
+  }
+
+  inorder(root)
+  return result;
 };
