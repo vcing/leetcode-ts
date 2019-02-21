@@ -49,28 +49,32 @@
  * @return {TreeNode[]}
  */
 var generateTrees = function (n) {
-    const result = [];
-    const nextNode = (root, node, left) => {
-        if (left.length === 0)
-            result.push(root);
-        let l = 0;
-        let rStart = 1;
-        while (left[rStart] < node.val)
-            rStart++;
-        while (left[l] <= node.val) {
-            let r = rStart;
-            if (l >= r)
-                r = l + 1;
-            while (r < left.length) {
-                // node.right = { val: r, left: null, right: null }
-            }
+    if (n === 0)
+        return [];
+    const clone = (root, offset) => {
+        if (!root) {
+            return null;
         }
+        const ret = { val: root.val + offset, left: null, right: null };
+        ret.left = clone(root.left, offset);
+        ret.right = clone(root.right, offset);
+        return ret;
     };
+    const dp = new Array(n + 1).fill(1).map(() => []);
+    dp[0].push(null);
     for (let i = 1; i <= n; i++) {
-        const root = { val: i, left: null, right: null };
-        const left = new Array(n).fill(1).map((v, i) => i + 1);
-        left.splice(i - 1, 1);
-        nextNode(root, root, left);
+        for (let l = 0; l < i; l++) {
+            const r = i - l - 1;
+            dp[l].forEach(left => {
+                dp[r].forEach(right => {
+                    const root = { val: l + 1, left: null, right: null };
+                    root.left = left;
+                    root.right = clone(right, l + 1);
+                    dp[i].push(root);
+                });
+            });
+        }
     }
-    return result;
+    return dp[n];
 };
+// console.log(generateTrees(5))
