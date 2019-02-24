@@ -35,47 +35,63 @@
  * @param {string} s3
  * @return {boolean}
  */
-// work but too slow
+// BFS work but too slow
+// var isInterleave = function (s1: string, s2: string, s3: string) {
+//   if (s1.length + s2.length > s3.length) return false
+//   if (s3 === '' && s1 === '' && s2 === '') return true
+//   let dp: string[] = []
+//   let nextDP: string[] = []
+//   if (s3[0] === s1[0]) dp.push('1')
+//   if (s3[0] === s2[0]) dp.push('2')
+//   for (let i = 1; i < s3.length; i++) {
+//     // console.log(dp[i - 1])
+//     dp.forEach(str => {
+//       const s2Current = str.split('').filter(i => i === '2').length - 1
+//       const s1Current = str.split('').filter(i => i === '1').length - 1
+//       // console.log(s1Current, s2Current, s1[s1Current + 1], s2[s2Current + 1], s3[i])
+//       if (s1[s1Current + 1] === s3[i]) nextDP.push(str + '1')
+//       if (s2[s2Current + 1] === s3[i]) nextDP.push(str + '2')
+//     })
+//     console.log(dp)
+//     dp = nextDP
+//     nextDP = []
+//   }
+//   return dp.filter(str => {
+//     const s1Length = str.split('').filter(s => s === '1').length
+//     const s2Length = str.split('').filter(s => s === '2').length
+//     if (s1Length === s3.length && s2.length !== 0) return false
+//     if (s2Length === s3.length && s1.length !== 0) return false
+//     return true
+//   }).length > 0
+// };
+// DFS work but too slow again
 var isInterleave = function (s1, s2, s3) {
     if (s1.length + s2.length > s3.length)
         return false;
     if (s3 === '' && s1 === '' && s2 === '')
         return true;
-    let dp = [];
-    let nextDP = [];
-    if (s3[0] === s1[0])
-        dp.push('1');
-    if (s3[0] === s2[0])
-        dp.push('2');
-    for (let i = 1; i < s3.length; i++) {
-        // console.log(dp[i - 1])
-        dp.forEach(str => {
-            const s2Current = str.split('').filter(i => i === '2').length - 1;
-            const s1Current = str.split('').filter(i => i === '1').length - 1;
-            // console.log(s1Current, s2Current, s1[s1Current + 1], s2[s2Current + 1], s3[i])
-            if (s1[s1Current + 1] === s3[i])
-                nextDP.push(str + '1');
-            if (s2[s2Current + 1] === s3[i])
-                nextDP.push(str + '2');
-        });
-        console.log(dp);
-        dp = nextDP;
-        nextDP = [];
-    }
-    return dp.filter(str => {
-        const s1Length = str.split('').filter(s => s === '1').length;
-        const s2Length = str.split('').filter(s => s === '2').length;
-        if (s1Length === s3.length && s2.length !== 0)
-            return false;
-        if (s2Length === s3.length && s1.length !== 0)
-            return false;
-        return true;
-    }).length > 0;
+    const backTrack = (current) => {
+        console.log(current, current.length, s3.length);
+        if (current.length === s3.length)
+            return true;
+        const index = current.length;
+        const s2Current = current.split('').filter(i => i === '2').length;
+        const s1Current = current.split('').filter(i => i === '1').length;
+        let result = false;
+        if (s3[index] === s2[s2Current])
+            result = backTrack(current + '2');
+        if (s3[index] === s1[s1Current] && !result)
+            result = backTrack(current + '1');
+        // if (s3[index] === s2[s2Current] && !result) result = backTrack(current + '2')
+        return result;
+    };
+    return backTrack('');
 };
 // console.log(isInterleave('aabcccaaa', 'dbbcacaba', 'aadbbcbcaccaba'))
 // console.log(isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
 // console.log(isInterleave('', 'abc', 'ab'))
-// console.log(isInterleave('a', 'b', 'a'))
+// console.log(isInterleave('a', 'b', 'a'));
 // console.log(isInterleave('', 'b', 'b'))
 // console.log(isInterleave('a', '', 'a'))
-// console.log(isInterleave("abbbbbbcabbacaacccababaabcccabcacbcaabbbacccaaaaaababbbacbb", "ccaacabbacaccacababbbbabbcacccacccccaabaababacbbacabbbbabc", "cacbabbacbbbabcbaacbbaccacaacaacccabababbbababcccbabcabbaccabcccacccaabbcbcaccccaaaaabaaaaababbbbacbbabacbbacabbbbabc"))
+console.log(isInterleave("abbbbbbcabbacaacccababaabcccabcacbcaabbbacccaaaaaababbbacbb", "ccaacabbacaccacababbbbabbcacccacccccaabaababacbbacabbbbabc", "cacbabbacbbbabcbaacbbaccacaacaacccabababbbababcccbabcabbaccabcccacccaabbcbcaccccaaaaabaaaaababbbbacbbabacbbacabbbbabc"));
+// console.log(isInterleave("bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa", "babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab", "babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab"))
