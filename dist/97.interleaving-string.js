@@ -65,27 +65,43 @@
 //   }).length > 0
 // };
 // DFS work but too slow again
+// var isInterleave = function (s1: string, s2: string, s3: string) {
+//   if (s1.length + s2.length > s3.length) return false
+//   if (s3 === '' && s1 === '' && s2 === '') return true
+//   const backTrack = (current: string): boolean => {
+//     console.log(current, current.length, s3.length)
+//     if (current.length === s3.length) return true
+//     const index = current.length
+//     const s2Current = current.split('').filter(i => i === '2').length
+//     const s1Current = current.split('').filter(i => i === '1').length
+//     let result = false
+//     if (s3[index] === s2[s2Current]) result = backTrack(current + '2')
+//     if (s3[index] === s1[s1Current] && !result) result = backTrack(current + '1')
+//     // if (s3[index] === s2[s2Current] && !result) result = backTrack(current + '2')
+//     return result
+//   }
+//   return backTrack('')
+// }
+// 2D DP
 var isInterleave = function (s1, s2, s3) {
-    if (s1.length + s2.length > s3.length)
+    if (s1.length + s2.length != s3.length)
         return false;
-    if (s3 === '' && s1 === '' && s2 === '')
-        return true;
-    const backTrack = (current) => {
-        console.log(current, current.length, s3.length);
-        if (current.length === s3.length)
-            return true;
-        const index = current.length;
-        const s2Current = current.split('').filter(i => i === '2').length;
-        const s1Current = current.split('').filter(i => i === '1').length;
-        let result = false;
-        if (s3[index] === s2[s2Current])
-            result = backTrack(current + '2');
-        if (s3[index] === s1[s1Current] && !result)
-            result = backTrack(current + '1');
-        // if (s3[index] === s2[s2Current] && !result) result = backTrack(current + '2')
-        return result;
-    };
-    return backTrack('');
+    const s1Length = s1.length;
+    const s2Length = s2.length;
+    const dp = new Array(s1Length + 1).fill(true).map(() => new Array(s2Length + 1).fill(false));
+    for (let s1Index = 0; s1Index <= s1Length; s1Index++) {
+        for (let s2Index = 0; s2Index <= s2Length; s2Index++) {
+            if (s1Index === 0 && s2Index === 0)
+                dp[s1Index][s2Index] = true;
+            else if (s1Index === 0)
+                dp[0][s2Index] = dp[0][s2Index - 1] && s2[s2Index - 1] === s3[s2Index - 1];
+            else if (s2Index === 0)
+                dp[s1Index][0] = dp[s1Index - 1][0] && s1[s1Index - 1] === s3[s1Index - 1];
+            else
+                dp[s1Index][s2Index] = (dp[s1Index - 1][s2Index] && s3[s1Index + s2Index - 1] === s1[s1Index - 1]) || (dp[s1Index][s2Index - 1] && s3[s1Index + s2Index - 1] === s2[s2Index - 1]);
+        }
+    }
+    return dp[s1Length][s2Length];
 };
 // console.log(isInterleave('aabcccaaa', 'dbbcacaba', 'aadbbcbcaccaba'))
 // console.log(isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
@@ -93,5 +109,5 @@ var isInterleave = function (s1, s2, s3) {
 // console.log(isInterleave('a', 'b', 'a'));
 // console.log(isInterleave('', 'b', 'b'))
 // console.log(isInterleave('a', '', 'a'))
-console.log(isInterleave("abbbbbbcabbacaacccababaabcccabcacbcaabbbacccaaaaaababbbacbb", "ccaacabbacaccacababbbbabbcacccacccccaabaababacbbacabbbbabc", "cacbabbacbbbabcbaacbbaccacaacaacccabababbbababcccbabcabbaccabcccacccaabbcbcaccccaaaaabaaaaababbbbacbbabacbbacabbbbabc"));
+// console.log(isInterleave("abbbbbbcabbacaacccababaabcccabcacbcaabbbacccaaaaaababbbacbb", "ccaacabbacaccacababbbbabbcacccacccccaabaababacbbacabbbbabc", "cacbabbacbbbabcbaacbbaccacaacaacccabababbbababcccbabcabbaccabcccacccaabbcbcaccccaaaaabaaaaababbbbacbbabacbbacabbbbabc"))
 // console.log(isInterleave("bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa", "babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab", "babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab"))
