@@ -59,12 +59,10 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isValidBST = function (root: TreeNode, father: TreeNode): Boolean {
+var isValidBST = function (root: TreeNode, max: number = Infinity, min: number = -Infinity): Boolean {
   if (!root) return true
   if (!root.left && !root.right) return true
-  if (root.left && root.left.val >= root.val) return false
-  if (root.right && root.right.val <= root.val) return false
-  if (father && father.left && root === father.left) if (root.right && root.right.val >= father.val) return false
-  if (father && father.right && root === father.right) if (root.left && root.left.val <= father.val) return false
-  return isValidBST(root.left, root) && isValidBST(root.right, root)
+  if (root.left && (root.left.val >= root.val || root.left.val >= max || root.left.val <= min)) return false
+  if (root.right && (root.right.val <= root.val || root.right.val <= min || root.right.val >= max)) return false
+  return isValidBST(root.left, Math.min(root.val, max), min) && isValidBST(root.right, max, Math.max(root.val, min))
 };
