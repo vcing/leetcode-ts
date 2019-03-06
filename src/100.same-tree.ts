@@ -66,6 +66,6 @@
  * @param {TreeNode} q
  * @return {boolean}
  */
-var isSameTree = function(p, q) {
-    
+var isSameTree = function (p: TreeNode, q: TreeNode) {
+
 };
