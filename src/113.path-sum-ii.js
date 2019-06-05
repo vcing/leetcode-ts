@@ -53,4 +53,17 @@
  * @return {number[][]}
  */
 var pathSum = function (root, sum) {
+    const results = [];
+    const helper = (root, sum, result = []) => {
+        result = [...result, root.val];
+        if (root.val === sum && !root.left && !root.right)
+            results.push(result);
+        if (root.left)
+            helper(root.left, sum - root.val, result);
+        if (root.right)
+            helper(root.right, sum - root.val, result);
+    };
+    if (root)
+        helper(root, sum);
+    return results;
 };
