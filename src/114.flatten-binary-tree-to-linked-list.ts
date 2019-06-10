@@ -51,7 +51,24 @@
  * @param {TreeNode} root
  * @return {void} Do not return anything, modify root in-place instead.
  */
-var flatten = function(root: TreeNode) {
-    
-    
+var flatten = function(root: TreeNode): {start:TreeNode, end:TreeNode} {
+    if(!root)return
+    let end = root
+    if(root.right){
+            const rightFlatten = flatten(root.right)
+        root.right = rightFlatten.start
+        let pointer = rightFlatten.end
+        while(pointer.right)pointer = pointer.right
+        end = pointer
+    }
+    if(root.left){
+        const leftFlatten = flatten(root.left)
+        root.left = null
+        leftFlatten.end.right = root.right
+        root.right = leftFlatten.start
+        let pointer = leftFlatten.end
+        while(pointer.right)pointer = pointer.right
+        end = pointer
+    }
+    return {start:root, end}
 };
