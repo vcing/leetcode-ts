@@ -68,7 +68,7 @@
  * @param {Node} root
  * @return {Node}
  */
-var connect = function(root) {
+var connect = function(root: Node) {
   if(!root) return root
   let level = [root]
   let nextLevel = []
