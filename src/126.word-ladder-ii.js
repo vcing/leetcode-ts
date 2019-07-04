@@ -71,34 +71,30 @@
  * @return {string[][]}
  */
 var findLadders = function (beginWord, endWord, wordList) {
-    const list = [];
-    const helper = (beginWord, wordList, result = []) => {
-        let hasExcept = false;
+    let results = [];
+    const travel = (beginWord, endWord, wordList, result) => {
         for (let p = 0; p < beginWord.length; p++) {
-            const except = beginWord.substring(0, p) + beginWord.substring(p + 1);
+            const except = beginWord.slice(0, p) + beginWord.slice(p + 1);
             for (let i = 0; i < wordList.length; i++) {
-                const compareExcept = wordList[i].substring(0, p) + wordList[i].substring(p + 1);
-                if (except === compareExcept) {
-                    hasExcept = true;
-                    const newBegin = wordList.splice(i, 1)[0];
-                    result.push(newBegin);
-                    helper(newBegin, wordList, result);
+                const word = wordList[i];
+                if (word === beginWord)
+                    continue;
+                const wordExcept = word.slice(0, p) + word.slice(p + 1);
+                if (except === wordExcept) {
+                    const newList = [...wordList];
+                    newList.splice(i, 1);
+                    if (word === endWord)
+                        return results.push(result);
+                    travel(word, endWord, newList, result.concat(word));
                 }
             }
         }
-        if (!hasExcept)
-            list.push(result);
     };
-    const endWordIndex = wordList.indexOf(endWord);
-    if (endWordIndex === -1)
-        return [];
-    wordList.splice(endWordIndex, 1);
-    wordList.unshift(beginWord);
-    helper(endWord, wordList);
-    return list.map(c => {
-        c.reverse();
-        c.push(endWord);
-        return c;
-    });
+    travel(beginWord, endWord, wordList, []);
+    results = results.map(c => c.concat(endWord)).sort((a, b) => a.length - b.length);
+    results = results.filter(c => c.length === results[0].length);
+    return results.map(c => [beginWord].concat(c));
 };
-console.log(findLadders('hit', 'cog', ["hot", "dot", "dog", "lot", "log", "cog"]));
+console.log(findLadders("qa", "sq", ["si", "go", "se", "cm", "so", "ph", "mt", "db", "mb", "sb", "kr", "ln", "tm", "le", "av", "sm", "ar", "ci", "ca", "br", "ti", "ba", "to", "ra", "fa", "yo", "ow", "sn", "ya", "cr", "po", "fe", "ho", "ma", "re", "or", "rn", "au", "ur", "rh", "sr", "tc", "lt", "lo", "as", "fr", "nb", "yb", "if", "pb", "ge", "th", "pm", "rb", "sh", "co", "ga", "li", "ha", "hz", "no", "bi", "di", "hi", "qa", "pi", "os", "uh", "wm", "an", "me", "mo", "na", "la", "st", "er", "sc", "ne", "mn", "mi", "am", "ex", "pt", "io", "be", "fm", "ta", "tb", "ni", "mr", "pa", "he", "lr", "sq", "ye"]).length);
+// console.log(findLadders('hit', 'cog', ["hot","dot","dog","lot","log","cog"]))
+// console.log(findLadders('abc', 'cba', ['abb', 'aba', 'cba']))
