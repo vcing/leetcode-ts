@@ -50,19 +50,31 @@
  * @return {number}
  */
 var candy = function (ratings) {
-    const cost = new Array(ratings.length).fill(0);
-    for (let i = 0; i < ratings.length - 1; i++) {
-        if (ratings[i] > ratings[i + 1])
-            cost[i]--;
-        else if (ratings[i] < ratings[i + 1])
-            cost[i]++;
+    const l2r = [];
+    const r2l = [];
+    for (let i = 0; i < ratings.length; i++) {
+        const ri = ratings.length - i - 1;
+        if (i === 0) {
+            l2r.push(1);
+            r2l.unshift(1);
+            continue;
+        }
+        if (ratings[i] > ratings[i - 1])
+            l2r.push(l2r[i - 1] + 1);
+        if (ratings[ri] > ratings[ri + 1])
+            r2l.unshift(r2l[0] + 1);
+        if (ratings[i] <= ratings[i - 1])
+            l2r.push(1);
+        if (ratings[ri] <= ratings[ri + 1])
+            r2l.unshift(1);
     }
-    return cost.reduce((prev, curr) => {
-        if (curr === 0)
-            return prev + 1;
-        if (curr < 0)
-            return prev + -curr + 1;
-        return prev + curr;
-    }, 0);
+    let result = 0;
+    for (let i = 0; i < ratings.length; i++) {
+        result += Math.max(l2r[i], r2l[i]);
+    }
+    console.log(l2r, r2l);
+    return result;
 };
-// console.log(candy([1,2,1,1,2,1]))
+console.log(candy([1, 2, 3, 1, 1, 3, 5, 3, 2, 3, 1]));
+console.log(candy([1, 0, 2]));
+console.log(candy([1, 2, 87, 87, 87, 2, 1]));
