@@ -70,9 +70,11 @@
 //   return backtracking(s)
 // };
 var wordBreak = function (s, wordDict) {
-    const dp = {};
+    const dp = { 0: [] };
     const lengths = wordDict.map(w => w.length);
     for (let i = 0; i < s.length; i++) {
+        if (!dp[i])
+            continue;
         for (let j = 0; j < wordDict.length; j++) {
             const word = wordDict[j];
             if (s.length - i < word.length)
@@ -82,6 +84,7 @@ var wordBreak = function (s, wordDict) {
                     dp[i].push(word.length);
                 else
                     dp[i] = [word.length];
+                dp[i + word.length] = [];
             }
         }
     }
@@ -102,15 +105,13 @@ var wordBreak = function (s, wordDict) {
         }
         return false;
     };
-    let hasAnswer = false;
-    for (let i = 0; i < lengths.length; i++) {
-        const length = lengths[i];
-        if (dp[s.length - length] && dp[s.length - length].indexOf(length) !== -1)
-            hasAnswer = true;
-    }
-    console.log('has answer');
-    if (!hasAnswer)
-        return false;
+    // let hasAnswer = false
+    // for(let i = 0; i < lengths.length; i++) {
+    //   const length = lengths[i]
+    //   if(dp[s.length - length] && dp[s.length - length].indexOf(length) !== -1) hasAnswer = true
+    // }
+    // // console.log('has answer')
+    // if(!hasAnswer) return false
     return backTracking(0);
 };
 // console.log(wordBreak("applepenapple", ["apple","pen"]))
